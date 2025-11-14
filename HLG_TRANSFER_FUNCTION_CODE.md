@@ -1,4 +1,22 @@
-# HLG Transfer Function - Code Implementation
+# HLG Transfer Function - Manual Entry for MLV App
+
+## Important Notice
+
+**HLG is NOT available as a predefined tonemap function in MLV App.** You must manually enter the transfer function formula below.
+
+## Manual Transfer Function Formula
+
+Copy and paste this exact formula into the Transfer Function field in MLV App:
+
+```c
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
+
+**Critical Notes:**
+- Use natural logarithm `log()` (ln), NOT `log10()`
+- Input `x` is normalized linear scene light (0.0 to 1.0)
+- Output is HLG signal value (0.0 to 1.0)
+- This formula follows the same format as other manual transfer functions like Sony S-Log3
 
 ## HLG Transfer Function Formula for MLV App
 

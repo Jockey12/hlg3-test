@@ -6,22 +6,35 @@
 ```
 Rec.2020 (BT.2020)
 ```
-*Defines the RGB color space primaries (without transfer function)*
+*Select from predefined dropdown - Defines the RGB color space primaries (without transfer function)*
 
-### Tonemap Function
+### Transfer Function (Manual Entry)
+**IMPORTANT:** Must be entered manually - HLG is not available as a predefined option
+
+**Enter this exact formula:**
 ```
-HLG (Hybrid Log-Gamma)
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
 ```
-*Applied after white balance, gamut conversion, and exposure to convert linear data*
+*Applied after white balance, gamut conversion, and exposure to convert linear data to HLG*
 
 ## Quick Setup Steps
 
 1. Open MLV App
 2. Load your MLV footage
-3. Set **Processing Gamut** to **Rec.2020** (color primaries only)
-4. Set **Tonemap Function** to **HLG** (transfer function)
+3. Set **Processing Gamut** to **Rec.2020** (select from predefined dropdown)
+4. **Manually enter the Transfer Function** formula (see below - HLG is not available as a preset)
 5. Adjust white balance and exposure as needed
 6. Export with 10-bit or higher settings
+
+## Transfer Function Formula (Manual Entry)
+
+Since HLG is not available as a predefined tonemap function, copy and paste this exact formula into the Transfer Function field:
+
+```
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
+
+**Note:** Use natural logarithm (log/ln), not log10
 
 ## Color Primaries (Rec.2020)
 

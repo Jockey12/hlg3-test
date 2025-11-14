@@ -6,8 +6,15 @@ This repository contains research and documentation for Sony's HLG3 (Hybrid Log-
 
 For using Sony's HLG3 color profile in MLV App:
 
-- **Processing Gamut**: `Rec.2020` (BT.2020) - *Defines color primaries only*
-- **Tonemap Function**: `HLG` (Hybrid Log-Gamma) - *Transfer function applied to linear data*
+- **Processing Gamut**: `Rec.2020` (BT.2020) - *Select from predefined options*
+- **Transfer Function**: **Must be entered manually** - *HLG is not available as a predefined tonemap function*
+
+### Manual Transfer Function Formula
+
+Enter this formula in the Transfer Function field:
+```
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
 
 ## Documentation
 

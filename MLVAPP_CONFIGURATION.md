@@ -23,11 +23,11 @@ This document shows how to configure MLV App for different profiles, with HLG3 h
 
 ### HLG3 Step-by-Step Configuration
 
-#### Step 1: Processing Gamut
+#### Step 1: Processing Gamut (Predefined Selection)
 ```
 Location: Color Processing Settings
 Setting: Processing Gamut
-Value: Rec.2020
+Value: Rec.2020 (select from dropdown)
 Processing Stage: 2 (Gamut Conversion)
 ```
 
@@ -46,56 +46,83 @@ Processing Stage: 2 (Gamut Conversion)
 - This setting requires "Use Camera Matrix" to be enabled
 - If disabled, Processing Gamut has no effect
 
-#### Step 2: Tonemap Function
+#### Step 2: Transfer Function (Manual Entry Required)
+
+**CRITICAL: HLG is NOT available as a predefined option.** You must manually enter the formula.
+
 ```
 Location: Color Processing Settings
-Setting: Tonemap Function (or Transfer Function / Gamma)
-Value: HLG (or Hybrid Log-Gamma)
+Setting: Tonemap Function / Transfer Function
+Value: Manual entry (see formula below)
 Processing Stage: 4 (Final conversion from linear)
 ```
+
+**Manual Formula to Enter:**
+```
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
+
+**How to Enter:**
+1. Locate the Transfer Function or Tonemap Function field
+2. Clear any existing formula
+3. Copy and paste the formula exactly as shown above
+4. Ensure you use `log()` (natural logarithm), not `log10()`
+5. Verify the formula was entered correctly (check parentheses and constants)
 
 **What it does:**
 - Applied AFTER white balance, gamut conversion, and exposure
 - Converts linear RGB data to HLG-encoded output
 - This is the transfer function (gamma curve)
 
-**Why HLG?**
-- Matches Sony's HLG3 gamma curve
-- Preserves HDR information from linear processing
-- Scene-referred encoding
-- Compatible with broadcast standards
+**Why Manual Entry?**
+- MLV App does not include HLG as a predefined tonemap function
+- Only Processing Gamut (Rec.2020) can be selected from presets
+- Users must provide the transfer function formula themselves
 
 ### Common Mistakes to Avoid
 
-❌ **Wrong**: Processing Gamut = Rec.709, Tonemap = HLG
+❌ **Wrong**: Trying to select "HLG" from the tonemap function dropdown
+- Result: HLG is not available as a preset option
+
+❌ **Wrong**: Processing Gamut = Rec.709, Manual Transfer = HLG formula
 - Result: Colors will be clipped and undersaturated
 
 ❌ **Wrong**: Processing Gamut = Rec.2020, Tonemap = Gamma 2.4
 - Result: Incorrect tonal distribution, not HDR
 
-❌ **Wrong**: Processing Gamut = sRGB, Transfer = HLG
-- Result: Severely limited color range
+❌ **Wrong**: Using log10 instead of log in the formula
+- Result: Incorrect transfer curve calculation
 
-✅ **Correct**: Processing Gamut = Rec.2020, Transfer = HLG
+✅ **Correct**: Processing Gamut = Rec.2020 (from dropdown), Manual Transfer = HLG formula
 - Result: Proper HLG3 color and tonal reproduction
+
+### Verification of Manual Entry
+
+After entering the HLG formula manually:
+
+1. **Double-check the formula** - Ensure no typos or missing characters
+2. **Verify parentheses** - All opening parentheses must have matching closing ones
+3. **Confirm log function** - Must use `log()` not `log10()`
+4. **Test with sample footage** - Export a test frame and verify it looks correct
 
 ### Alternative Workflows
 
-#### If Rec.2020 is not available:
+#### MLV App Limitation:
 
-1. **Option 1**: Use widest available gamut (P3 if available)
-   - Will limit color range but maintain structure
+**Important:** In MLV App, only the Processing Gamut can be selected from predefined options. The transfer function must be entered manually.
 
-2. **Option 2**: Use Rec.709 with HLG transfer
-   - Maintains tonal curve but limits color
-   - Not recommended for HDR delivery
+1. **What's Available as Presets:**
+   - Processing Gamut: Rec.2020, Rec.709, DCI-P3, etc. (select from dropdown)
 
-#### If HLG transfer is not available:
+2. **What Must Be Entered Manually:**
+   - Transfer Function: HLG formula (copy and paste the formula)
 
-Unfortunately, there's no good substitute for HLG transfer function. You would need to:
+#### If you cannot enter custom transfer functions:
+
+Unfortunately, without the ability to manually enter transfer functions, you cannot achieve true HLG output in MLV App. Alternatives:
 1. Export in Linear or Log
-2. Apply HLG LUT in post-production software
-3. This is less ideal than native HLG support
+2. Apply HLG LUT in post-production software (DaVinci Resolve, Adobe Premiere)
+3. This is less ideal than direct HLG encoding
 
 ### Verification
 
