@@ -36,7 +36,7 @@ MLV App processes footage in the following stages:
 
 For Sony HLG3 color profile in MLV App, use:
 
-**Processing Gamut: `Rec.2020` (BT.2020)**
+**Processing Gamut: `Rec.2020` (BT.2020)** - Available as predefined option
 
 **What it does:**
 - Defines the RGB color space primaries (without transfer function)
@@ -48,7 +48,7 @@ For Sony HLG3 color profile in MLV App, use:
 - HLG is designed to work with the wide color gamut Rec.2020 (ITU-R BT.2020)
 - Rec.2020 covers a much wider color space than Rec.709
 - This is the standardized color space for HDR content
-- Alternative: If Rec.2020 is not available, use the widest available gamut
+- Can be selected from the Processing Gamut dropdown in MLV App
 
 **Color Primaries (BT.2020):**
 - Red: x=0.708, y=0.292
@@ -56,11 +56,16 @@ For Sony HLG3 color profile in MLV App, use:
 - Blue: x=0.131, y=0.046
 - White Point: D65 (x=0.3127, y=0.3290)
 
-### Tonemap Function
+### Transfer Function (Manual Entry Required)
 
-For Sony HLG3 color profile in MLV App, use:
+For Sony HLG3 color profile in MLV App:
 
-**Tonemap Function: `HLG` or `Hybrid Log-Gamma`**
+**IMPORTANT:** HLG is **NOT** available as a predefined tonemap function. You must manually enter the transfer function formula.
+
+**Manual Formula:**
+```
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
 
 **What it does:**
 - Applied AFTER white balance, gamut conversion, and exposure (stage 4)
@@ -72,6 +77,7 @@ For Sony HLG3 color profile in MLV App, use:
 - The transfer function is defined in ITU-R BT.2100
 - System gamma: 1.2 for typical viewing conditions
 - Not a traditional tonemapping operator like Reinhard, but a standardized transfer function
+- Must be entered manually as MLV App does not include HLG as a preset option
 
 **HLG Transfer Function Characteristics:**
 - **Lower Range (0-0.5)**: Uses a gamma curve (approximately 0.5^γ where γ ≈ 1.2)
@@ -109,16 +115,20 @@ While standard HLG is the base, Sony's HLG3 includes:
 1. **Import MLV footage**
    - Load your raw MLV files into MLV App
 
-2. **Set Processing Gamut**
+2. **Set Processing Gamut** (Predefined Option)
    - Navigate to color processing settings
-   - Select: **Rec.2020** or **BT.2020**
+   - Select: **Rec.2020** or **BT.2020** from the dropdown
    - This defines the color primaries (stage 2 of processing)
    - Ensure "Use Camera Matrix" is enabled
 
-3. **Set Tonemap Function**
-   - In the tonemap function dropdown
-   - Select: **HLG** or **Hybrid Log-Gamma**
+3. **Enter Transfer Function Manually** (Required)
+   - Locate the Transfer Function / Tonemap Function field
+   - **Copy and paste this exact formula:**
+   ```
+   (x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+   ```
    - This is applied as the final stage (stage 4) after linear processing
+   - **Important:** Use `log()` (natural logarithm), not `log10()`
 
 4. **White Balance**
    - Set to daylight (5600K) or appropriate for your scene
@@ -169,8 +179,15 @@ When working with HLG3:
 ### If colors look incorrect:
 
 1. **Check Processing Gamut**: Ensure it's set to Rec.2020, not Rec.709
-2. **Verify Transfer Function**: Must be HLG, not standard Gamma or Log
-3. **Monitor Setup**: Ensure your display is properly configured for HLG
+2. **Verify Transfer Function**: Confirm the HLG formula was entered correctly (check for typos)
+3. **Check log function**: Must use `log()` not `log10()` in the formula
+4. **Monitor Setup**: Ensure your display is properly configured for HLG
+
+### If you cannot enter the transfer function:
+
+1. **Field Not Editable**: Some MLV App versions may not support custom transfer functions
+2. **Alternative**: Export in Linear or Log and apply HLG in post-production
+3. **Workaround**: Use LUT files if MLV App supports them
 
 ### If image looks too dark:
 
@@ -212,8 +229,13 @@ When working with HLG3:
 ## Conclusion
 
 For using Sony's HLG3 color profile in MLV App:
-- **Processing Gamut**: Rec.2020 (BT.2020)
-- **Transfer Function**: HLG (Hybrid Log-Gamma)
+- **Processing Gamut**: Rec.2020 (BT.2020) - Select from dropdown
+- **Transfer Function**: Must be entered manually using the formula below
+
+**Manual Transfer Function Formula:**
+```
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
 
 This configuration will provide the most accurate representation of HLG3 footage, maintaining the wide color gamut and HDR characteristics that Sony's HLG3 is designed to deliver.
 

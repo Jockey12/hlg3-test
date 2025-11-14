@@ -11,8 +11,15 @@ To use Sony's HLG3 color profile in MLV App, configure these two settings:
 
 **Requirements:** "Use Camera Matrix" must be enabled for this setting to take effect.
 
-### 2. Tonemap Function  
-**Set to:** `HLG` (or `Hybrid Log-Gamma`)
+**How:** Select from the predefined Processing Gamut dropdown options.
+
+### 2. Transfer Function (Manual Entry Required)
+**IMPORTANT:** HLG is **NOT** available as a predefined tonemap function. You must manually enter the transfer function formula.
+
+**Enter this formula:**
+```c
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
 
 **What it does:** Applies the HLG transfer function to convert linear RGB data to HLG-encoded output. This happens AFTER white balance, gamut conversion, and exposure adjustments.
 
@@ -145,15 +152,20 @@ A: The HLG standard (ITU-R BT.2100) specifies natural logarithm. This is differe
 **Quick Reference Card:**
 
 ```
-┌─────────────────────────────────────────┐
-│  Sony HLG3 for MLV App - Quick Setup    │
-├─────────────────────────────────────────┤
-│                                         │
-│  Processing Gamut:    Rec.2020         │
-│                                         │
-│  Tonemap Function:    HLG              │
-│                                         │
-│  Export Bit Depth:    10-bit minimum   │
-│                                         │
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  Sony HLG3 for MLV App - Quick Setup                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Processing Gamut:    Rec.2020 (select from dropdown)      │
+│                                                             │
+│  Transfer Function:   MANUAL ENTRY REQUIRED                │
+│                                                             │
+│  Formula to Enter:                                          │
+│  (x >= 0.08333333) ?                                        │
+│    (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : │
+│    sqrt(3.0 * x)                                            │
+│                                                             │
+│  Export Bit Depth:    10-bit minimum                        │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
