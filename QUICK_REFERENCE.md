@@ -6,18 +6,20 @@
 ```
 Rec.2020 (BT.2020)
 ```
+*Defines the RGB color space primaries (without transfer function)*
 
-### Transfer Function
+### Tonemap Function
 ```
 HLG (Hybrid Log-Gamma)
 ```
+*Applied after white balance, gamut conversion, and exposure to convert linear data*
 
 ## Quick Setup Steps
 
 1. Open MLV App
 2. Load your MLV footage
-3. Set **Processing Gamut** to **Rec.2020**
-4. Set **Transfer Function** to **HLG**
+3. Set **Processing Gamut** to **Rec.2020** (color primaries only)
+4. Set **Tonemap Function** to **HLG** (transfer function)
 5. Adjust white balance and exposure as needed
 6. Export with 10-bit or higher settings
 

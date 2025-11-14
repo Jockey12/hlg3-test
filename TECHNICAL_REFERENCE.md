@@ -23,6 +23,28 @@ b = 0.28466892
 c = 0.55991073
 ```
 
+### MLV App Compatible Format
+
+Following the format used in MLV App source code (similar to Sony S-Log3):
+
+```c
+// HLG OETF in single-line conditional format
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
+
+**Comparison with Sony S-Log3:**
+```c
+// Sony S-Log3 (for reference)
+(x >= 0.01125000) ? (420.0 + log10((x + 0.01) / (0.18 + 0.01)) * 261.5) / 1023.0 : (x * (171.2102946929 - 95.0) / 0.01125000 + 95.0) / 1023.0
+
+// HLG
+(x >= 0.08333333) ? (0.17883277 * log(12.0 * x - 0.28466892) + 0.55991073) : sqrt(3.0 * x)
+```
+
+Note: HLG uses natural logarithm (ln/log), while S-Log3 uses log10.
+
+For detailed code implementation, see [HLG_TRANSFER_FUNCTION_CODE.md](HLG_TRANSFER_FUNCTION_CODE.md).
+
 ### EOTF (Electro-Optical Transfer Function)
 
 The inverse function to convert from signal (E') back to display light:

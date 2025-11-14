@@ -6,13 +6,16 @@ This repository contains research and documentation for Sony's HLG3 (Hybrid Log-
 
 For using Sony's HLG3 color profile in MLV App:
 
-- **Processing Gamut**: `Rec.2020` (BT.2020)
-- **Transfer Function**: `HLG` (Hybrid Log-Gamma)
+- **Processing Gamut**: `Rec.2020` (BT.2020) - *Defines color primaries only*
+- **Tonemap Function**: `HLG` (Hybrid Log-Gamma) - *Transfer function applied to linear data*
 
 ## Documentation
 
 - **[Quick Reference](QUICK_REFERENCE.md)** - Essential settings and quick setup guide
 - **[Complete Documentation](HLG3_COLOR_PROFILE.md)** - Detailed technical specifications and usage guide
+- **[MLV App Configuration](MLVAPP_CONFIGURATION.md)** - Step-by-step configuration examples
+- **[Transfer Function Code](HLG_TRANSFER_FUNCTION_CODE.md)** - HLG formula in MLV App compatible format
+- **[Technical Reference](TECHNICAL_REFERENCE.md)** - Mathematical specifications and color science details
 
 ## What is HLG3?
 
@@ -26,8 +29,14 @@ HLG3 is Sony's implementation of the Hybrid Log-Gamma HDR standard (ITU-R BT.210
 
 MLV App is used to process raw video files from Magic Lantern modified cameras. To properly interpret and export footage that matches Sony's HLG3 look, you need to configure:
 
-1. The correct **color space** (Processing Gamut)
-2. The correct **gamma curve** (Transfer Function)
+1. The correct **color primaries** (Processing Gamut) - defines the RGB color space without transfer function
+2. The correct **tonemap function** - the transfer/gamma function applied after linear processing
+
+MLV App's processing pipeline:
+1. White balance (linear)
+2. Gamut conversion using Processing Gamut (linear)
+3. Exposure adjustment (linear)
+4. Tonemap Function applied (converts from linear to desired output)
 
 This documentation provides those exact parameters based on the HLG standard and Sony's implementation.
 

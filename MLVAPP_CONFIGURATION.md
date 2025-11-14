@@ -1,13 +1,21 @@
 # MLV App Configuration Examples
 
-## Comparison: Different Gamma Curves
+## Understanding MLV App Processing Pipeline
 
-This document shows how to configure MLV App for different gamma curves, with HLG3 highlighted.
+MLV App processes raw footage in these stages:
+1. **White Balance** - Applied to linear raw data
+2. **Gamut Conversion** - Using Processing Gamut (defines color primaries)
+3. **Exposure** - Adjustment in linear space
+4. **Tonemap Function** - Transfer function converts linear to output encoding
+
+## Comparison: Different Processing Settings
+
+This document shows how to configure MLV App for different profiles, with HLG3 highlighted.
 
 ### Configuration Matrix
 
-| Profile | Processing Gamut | Transfer Function | Notes |
-|---------|------------------|-------------------|-------|
+| Profile | Processing Gamut | Tonemap Function | Notes |
+|---------|------------------|------------------|-------|
 | **HLG3 (Sony)** | **Rec.2020** | **HLG** | HDR, ~15 stops, broadcast ready |
 | Standard Rec.709 | Rec.709 | Gamma 2.4 | SDR, ~6-8 stops, web/broadcast |
 | Cineon/DPX | Rec.709 | Cineon | Film scanning, ~10 stops |
@@ -20,7 +28,13 @@ This document shows how to configure MLV App for different gamma curves, with HL
 Location: Color Processing Settings
 Setting: Processing Gamut
 Value: Rec.2020
+Processing Stage: 2 (Gamut Conversion)
 ```
+
+**What it does:**
+- Defines RGB color space primaries only (no transfer function)
+- Converts camera sensor data to Rec.2020 primaries
+- Applied to linear data before tonemap function
 
 **Why Rec.2020?**
 - HLG standard requires wide color gamut
@@ -28,25 +42,35 @@ Value: Rec.2020
 - Essential for HDR content
 - Matches Sony camera implementation
 
-#### Step 2: Transfer Function
+**Important:**
+- This setting requires "Use Camera Matrix" to be enabled
+- If disabled, Processing Gamut has no effect
+
+#### Step 2: Tonemap Function
 ```
 Location: Color Processing Settings
-Setting: Transfer Function / Gamma
+Setting: Tonemap Function (or Transfer Function / Gamma)
 Value: HLG (or Hybrid Log-Gamma)
+Processing Stage: 4 (Final conversion from linear)
 ```
+
+**What it does:**
+- Applied AFTER white balance, gamut conversion, and exposure
+- Converts linear RGB data to HLG-encoded output
+- This is the transfer function (gamma curve)
 
 **Why HLG?**
 - Matches Sony's HLG3 gamma curve
-- Preserves HDR information
+- Preserves HDR information from linear processing
 - Scene-referred encoding
 - Compatible with broadcast standards
 
 ### Common Mistakes to Avoid
 
-❌ **Wrong**: Processing Gamut = Rec.709, Transfer = HLG
+❌ **Wrong**: Processing Gamut = Rec.709, Tonemap = HLG
 - Result: Colors will be clipped and undersaturated
 
-❌ **Wrong**: Processing Gamut = Rec.2020, Transfer = Gamma 2.4
+❌ **Wrong**: Processing Gamut = Rec.2020, Tonemap = Gamma 2.4
 - Result: Incorrect tonal distribution, not HDR
 
 ❌ **Wrong**: Processing Gamut = sRGB, Transfer = HLG

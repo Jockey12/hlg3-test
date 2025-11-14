@@ -24,11 +24,25 @@ Sony's HLG3 variant provides:
 
 ## MLV App Settings
 
+### Understanding MLV App Processing Pipeline
+
+MLV App processes footage in the following stages:
+1. **White Balance** - Applied to linear raw data
+2. **Gamut Conversion** - Using Processing Gamut setting (primaries only)
+3. **Exposure** - Adjustment in linear space
+4. **Tonemap Function** - Transfer function applied to convert from linear
+
 ### Processing Gamut
 
 For Sony HLG3 color profile in MLV App, use:
 
 **Processing Gamut: `Rec.2020` (BT.2020)**
+
+**What it does:**
+- Defines the RGB color space primaries (without transfer function)
+- Converts camera sensor data to Rec.2020 color primaries
+- Applied during the gamut conversion stage (stage 2)
+- Camera matrix must be enabled for this setting to work
 
 **Explanation:**
 - HLG is designed to work with the wide color gamut Rec.2020 (ITU-R BT.2020)
@@ -42,16 +56,22 @@ For Sony HLG3 color profile in MLV App, use:
 - Blue: x=0.131, y=0.046
 - White Point: D65 (x=0.3127, y=0.3290)
 
-### Transfer Function
+### Tonemap Function
 
 For Sony HLG3 color profile in MLV App, use:
 
-**Transfer Function: `HLG` or `Hybrid Log-Gamma`**
+**Tonemap Function: `HLG` or `Hybrid Log-Gamma`**
+
+**What it does:**
+- Applied AFTER white balance, gamut conversion, and exposure (stage 4)
+- Converts linear RGB data to HLG-encoded output
+- This is the transfer function (gamma curve) that shapes the tonal response
 
 **Explanation:**
 - HLG uses a hybrid transfer function combining gamma and logarithmic curves
 - The transfer function is defined in ITU-R BT.2100
 - System gamma: 1.2 for typical viewing conditions
+- Not a traditional tonemapping operator like Reinhard, but a standardized transfer function
 
 **HLG Transfer Function Characteristics:**
 - **Lower Range (0-0.5)**: Uses a gamma curve (approximately 0.5^γ where γ ≈ 1.2)
@@ -62,7 +82,7 @@ For Sony HLG3 color profile in MLV App, use:
 
 **Mathematical Definition:**
 
-For normalized signal E (0-1):
+For normalized linear signal E (0-1):
 ```
 If 0 ≤ E ≤ 1/12:
     E' = √(3 × E)
@@ -92,10 +112,13 @@ While standard HLG is the base, Sony's HLG3 includes:
 2. **Set Processing Gamut**
    - Navigate to color processing settings
    - Select: **Rec.2020** or **BT.2020**
+   - This defines the color primaries (stage 2 of processing)
+   - Ensure "Use Camera Matrix" is enabled
 
-3. **Set Transfer Function**
-   - In the transfer function dropdown
+3. **Set Tonemap Function**
+   - In the tonemap function dropdown
    - Select: **HLG** or **Hybrid Log-Gamma**
+   - This is applied as the final stage (stage 4) after linear processing
 
 4. **White Balance**
    - Set to daylight (5600K) or appropriate for your scene
