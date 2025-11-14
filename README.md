@@ -11,6 +11,7 @@ For using Sony's HLG3 color profile in MLV App:
 
 ## Documentation
 
+- **[Summary](SUMMARY.md)** - Complete overview and quick reference card
 - **[Quick Reference](QUICK_REFERENCE.md)** - Essential settings and quick setup guide
 - **[Complete Documentation](HLG3_COLOR_PROFILE.md)** - Detailed technical specifications and usage guide
 - **[MLV App Configuration](MLVAPP_CONFIGURATION.md)** - Step-by-step configuration examples
